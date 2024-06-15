@@ -60,3 +60,51 @@
 - 受け取ったコンポーネントは一切修正せずに共通処理を梱包して返すだけ
 - [簡単な例](https://qiita.com/jungyeounjae/items/6905bb1de6319dee2c5a)
 - 共通処理を入れる一番階層の高いcomponentsディレクトリには、こういうのを入れたら良さそう。
+- でもあんまり使わない？
+
+## レンダープロップパターン
+
+- 再レンダリングされる場所を限定できる
+- ネストが深くなりやすくて可読性が下がる
+- HOCもレンダープロップも基本Hooksで置き換えられるが、再レンダリングを完全に制御したかったり、関心分離がしづらいユースケースがあれば適宜使っていく。
+- [hook, hoc, props.renderの使い分け](https://zenn.dev/kazizi55/scraps/2313391b31a83b)
+- [制御/非制御コンポーネント](https://qiita.com/y-suzu/items/8fc2edcd33951733cfcb)
+
+## フックパターン
+
+- ラッパー地獄によるデータの流れが追いづらくなる問題を防ぐ代物
+- フロントエンドにおけるロジックとは、レンダー以外の部分を指す。（この定義は大事だと思う）
+- 例として、カウントを制御するロジックとwidthを制御するロジックが絡まり合うとマジで見づらい。
+- useEffectはクラスコンポーネント時代のライフサイクルメソッドを統合したものらしい。（びっくり）
+
+```react.jsx
+componentDidMount() { ... }
+useEffect(() => { ... }, [])
+
+componentWillUnmount() { ... }
+useEffect(() => { return () => { ... } }, [])
+
+componentDidUpdate() { ... }
+useEffect(() => { ... })
+```
+
+- なんとhooksは一から自分で作る必要はなく、すでにコミュニティで公開している数多くのhooksを参考にしたり、インポートして使用できる。（まじかよ。全部自作してたわ。）
+  - 参考コミュニティ
+    - [React Use](https://github.com/streamich/react-use)
+    - [useHooks](https://usehooks.com/)
+    - [Collection of React Hooks](https://nikgraf.github.io/react-hooks/)
+- useReducerはuseStateと同等以上のことができるし、ロジックをアクションとして別の関数に分離できるため、基本useStateよりもuseReducerでいいらしい。しばらくuseReducer使い込んでみよう。
+  - [参考記事](https://zenn.dev/sorye/articles/usereducer-practice)
+
+## フライウェイトパターン
+
+- 類似のオブジェクトを複数作成する際に既存のインスタンスを検索して、見つかったらそのまま使うパターン。メモリの効率がいいらしい。
+- JSではプロトタイプチェーンによって同じことが簡単にできるので、特に実装はなし。
+- 現在ではGB単位のメモリが標準なので、重要性が下がっている。
+
+## ファクトリパターン
+
+- newを使用せずに既存のオブジェクトをカスタムしたオブジェクトを作成できる。
+- JSのアロー関数では暗黙にオブジェクトを返してるので、ほぼ意識することはないみたい。
+
+## 

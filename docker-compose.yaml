@@ -10,4 +10,4 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
-    command: sh -c "cd dp-app && npm run start"
+    command: sh -c "cd dp-app && npm install && npm run start"
